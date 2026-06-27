@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>高德地图路径可视化</title>
+    <style>
+        body { margin: 0; }
+        #container { width: 100%; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="container"></div>
+    <script src="https://webapi.amap.com/maps?v=2.0&key=731df7f33e6cff66bcf24378ce6a2b05"></script>
+    <script>
+        var map = new AMap.Map("container", {
+            zoom: 16,
+            center: [117.133767, 31.818333],
+            resizeEnable: true
+        });
+
+        // 解析路径
+        var path = "117.133767,31.818333;117.133385,31.818333;117.133381,31.818329;117.133346,31.8176;117.133342,31.817595;117.132986,31.817578;117.132986,31.817578;117.130725,31.817526;117.130716,31.817522;117.130725,31.81773;117.130725,31.81773;117.130681,31.817674;117.130621,31.817674;117.130621,31.817674;117.129475,31.817674;117.129475,31.817674;117.129249,31.817691;117.129162,31.817739;117.129167,31.818021;117.129136,31.818121;117.129071,31.818142;117.129071,31.818142;117.128967,31.818173;117.128963,31.818177;117.128715,31.818103;117.128711,31.818099;117.128121,31.817938;117.128116,31.817934;117.127747,31.817826;117.127743,31.817821;117.127769,31.817743;117.12786,31.817635".split(";").map(function(item){
+            var arr = item.split(",");
+            return new AMap.LngLat(parseFloat(arr[0]), parseFloat(arr[1]));
+        });
+
+        // 绘制轨迹线
+        var polyline = new AMap.Polyline({
+            path: path,
+            strokeColor: "#2E86AB",
+            strokeWeight: 5,
+            strokeOpacity: 0.85,
+            lineJoin: "round"
+        });
+        map.add(polyline);
+
+        // 起点标记
+        var startMarker = new AMap.Marker({
+            position: path[0],
+            icon: new AMap.Icon({
+                size: new AMap.Size(25, 34),
+                image: "https://webapi.amap.com/theme/v1.3/markers/n/start.png"
+            })
+        });
+        map.add(startMarker);
+
+        // 终点标记
+        var endMarker = new AMap.Marker({
+            position: path[path.length - 1],
+            icon: new AMap.Icon({
+                size: new AMap.Size(25, 34),
+                image: "https://webapi.amap.com/theme/v1.3/markers/n/end.png"
+            })
+        });
+        map.add(endMarker);
+
+        // 自动适配视野
+        map.setFitView();
+    </script>
+</body>
+</html>
